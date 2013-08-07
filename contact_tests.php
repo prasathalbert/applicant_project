@@ -1,11 +1,15 @@
 <?PHP
+
 require_once("AbstractModel.php");
 require_once("Contact.php");
-ini_set("display_errors", true);
 
-$contact = new Contact();
+ini_set("display_errors", false);
+error_reporting(0);
+
+$contact = new Contact("localhost","root","","evaluation_schema");
 
 $contact->load(1);
+
 print_r($contact->getData()); 
 // Should print:
 // id => 1,
@@ -18,25 +22,32 @@ echo $contact->getData('name');
 
 $contact->setData('name', 'John Walker')->save(); //Should run an UPDATE query
 echo '<br/><br/>';
+
+$contact2 = new Contact("localhost","root","","evaluation_schema");
+
+$contact2->setData(array(
+    "name" => "Gilbert Barber",
+    "email" => "gilbTheparrot@gmail.com"))->save();
+
 print_r($contact->load(1)->getData());
 //Should print
 // id => 1,
 // name => John Walker
 // email => john@doe.com
-
-$contact->setData(array(
+$contact3 = new Contact("localhost","root","","evaluation_schema");
+$contact3->setData(array(
 "id" => 1,
 "name" => "John Doe the 2nd",
 "email" => "john@doe2.com"
 ))->save();
 echo '<br/><br/>';
-print_r($contact->load(1)->getData());
+print_r($contact3->load(1)->getData());
 //Should print
 // id => 1,
 // name => John Doe the 2nd
 // email => john@doe2.com
 
-$newContact = new Contact();
+$newContact = new Contact("localhost","root","","evaluation_schema");
 $newContact->setData(array(
     "name" => "Gilbert Barber",
     "email" => "gilbTheparrot@gmail.com"
